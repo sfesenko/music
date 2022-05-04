@@ -32,6 +32,8 @@ public class Music.Widgets.StatusBar : Gtk.ActionBar {
         }
     }
 
+    public signal void volume_changed(double volume);
+
     construct {
         var add_pl_menuitem = new Gtk.MenuItem.with_label (_("Add Playlist"));
         var add_spl_menuitem = new Gtk.MenuItem.with_label (_("Add Smart Playlist"));
@@ -56,9 +58,13 @@ public class Music.Widgets.StatusBar : Gtk.ActionBar {
             popover = eq_popover
         };
 
+        var volume_button = new Gtk.VolumeButton();
+        volume_button.value_changed.connect((v) => volume_changed (v));
+
         get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         pack_start (playlist_menubutton);
         pack_end (eq_menubutton);
+        pack_end (volume_button);
 
         add_pl_menuitem.activate.connect (() => {
             App.main_window.create_new_playlist ();

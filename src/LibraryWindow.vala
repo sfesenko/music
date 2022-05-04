@@ -190,6 +190,8 @@ public class Music.LibraryWindow : LibraryWindowInterface, Hdy.ApplicationWindow
         return base.key_press_event (event);
     }
 
+    const int TITLEBAR_BUTTON_SIZE = Gtk.IconSize.BUTTON;
+
     public void build_ui () {
         height_request = 350;
         width_request = 400;
@@ -226,27 +228,27 @@ public class Music.LibraryWindow : LibraryWindowInterface, Hdy.ApplicationWindow
         menu.show_all ();
 
         var menu_button = new Gtk.MenuButton ();
-        menu_button.image = new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR);
+        menu_button.image = new Gtk.Image.from_icon_name ("open-menu-symbolic", TITLEBAR_BUTTON_SIZE);
         menu_button.popup = menu;
         menu_button.valign = Gtk.Align.CENTER;
 
         var previous_button = new Gtk.Button.from_icon_name (
             "media-skip-backward-symbolic",
-            Gtk.IconSize.LARGE_TOOLBAR
+            TITLEBAR_BUTTON_SIZE
         );
         previous_button.action_name = ACTION_PREFIX + ACTION_PLAY_PREVIOUS;
         previous_button.tooltip_text = _("Previous");
 
         var play_button = new Gtk.Button.from_icon_name (
             "media-playback-start-symbolic",
-            Gtk.IconSize.LARGE_TOOLBAR
+            TITLEBAR_BUTTON_SIZE
         );
         play_button.action_name = ACTION_PREFIX + ACTION_PLAY;
         play_button.tooltip_text = _("Play");
 
         var next_button = new Gtk.Button.from_icon_name (
             "media-skip-forward-symbolic",
-            Gtk.IconSize.LARGE_TOOLBAR
+            TITLEBAR_BUTTON_SIZE
         );
         next_button.action_name = ACTION_PREFIX + ACTION_PLAY_NEXT;
         next_button.tooltip_text = _("Next");
@@ -306,13 +308,13 @@ public class Music.LibraryWindow : LibraryWindowInterface, Hdy.ApplicationWindow
                 if (new_state.get_boolean () == false) {
                     play_button.image = new Gtk.Image.from_icon_name (
                         "media-playback-start-symbolic",
-                        Gtk.IconSize.LARGE_TOOLBAR
+                        TITLEBAR_BUTTON_SIZE
                     );
                     play_button.tooltip_text = _("Play");
                 } else {
                     play_button.image = new Gtk.Image.from_icon_name (
                         "media-playback-pause-symbolic",
-                        Gtk.IconSize.LARGE_TOOLBAR
+                        TITLEBAR_BUTTON_SIZE
                     );
                     play_button.tooltip_text = _("Pause");
                 }
@@ -487,6 +489,10 @@ public class Music.LibraryWindow : LibraryWindowInterface, Hdy.ApplicationWindow
             } catch (GLib.Error e) {
                 warning (e.message);
             }
+        });
+
+        statusbar.volume_changed.connect ((v) => {
+            App.player.volume = v;
         });
 
         load_playlists ();
